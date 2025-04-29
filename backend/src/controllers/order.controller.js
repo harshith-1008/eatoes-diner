@@ -1,12 +1,13 @@
-import { apiError } from "../utils/apiError";
-import { apiResponse } from "../utils/apiResponse";
-import { asyncHandler } from "../utils/asyncHandler";
-import prisma from "../config/prisma";
+import { apiError } from "../utils/apiError.js";
+import { apiResponse } from "../utils/apiResponse.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import prisma from "../config/prisma.js";
 
 const createOrder = asyncHandler(async (req, res) => {
   const { orderItems } = req.body;
+  console.log(orderItems);
   const userId = req.user.id;
-
+  console.log(userId);
   if (!orderItems || orderItems.length === 0) {
     throw new apiError(400, "No order items provided");
   }
@@ -25,7 +26,7 @@ const createOrder = asyncHandler(async (req, res) => {
     .json(new apiResponse(201, order, "Order placed successfully"));
 });
 
-export const getUserOrders = asyncHandler(async (req, res) => {
+const getUserOrders = asyncHandler(async (req, res) => {
   const userId = req.user.id;
 
   const orders = await prisma.order.findMany({

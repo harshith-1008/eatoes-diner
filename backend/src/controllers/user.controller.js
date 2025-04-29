@@ -1,9 +1,9 @@
-import { apiError } from "../utils/apiError";
-import { apiResponse } from "../utils/apiResponse";
-import { asyncHandler } from "../utils/asyncHandler";
+import { apiError } from "../utils/apiError.js";
+import { apiResponse } from "../utils/apiResponse.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import prisma from "../config/prisma";
+import bcrypt from "bcrypt";
+import prisma from "../config/prisma.js";
 
 const hashPassword = async (plainPassword) => {
   return await bcrypt.hash(plainPassword, 10);
@@ -41,6 +41,7 @@ const generateRefreshToken = (user) => {
 
 const registerUser = asyncHandler(async (req, res) => {
   const { name, phone, password, role } = req.body;
+  console.log(name, phone, password, role);
 
   if (!name || !phone || !password) {
     throw new apiError(400, "All fields are required to register user");
@@ -74,20 +75,31 @@ const registerUser = asyncHandler(async (req, res) => {
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { refreshToken },
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 3 * 24 * 60 * 60 * 1000,
   });
 
-  return res
-    .status(201)
-    .json(
-      new apiResponse(
-        201,
-        { accessToken, refreshToken },
-        "User registered successfully"
-      )
-    );
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+
+  return res.status(201).json(
+    new apiResponse(
+      201,
+      {
+        user: { id: user.id, name: user.name, phone: user.phone },
+        accessToken,
+        refreshToken,
+      },
+      "User registered successfully"
+    )
+  );
 });
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -116,16 +128,31 @@ const loginUser = asyncHandler(async (req, res) => {
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
 
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { refreshToken },
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
   });
 
-  return res
-    .status(200)
-    .json(
-      new apiResponse(200, { accessToken, refreshToken }, "Login successful")
-    );
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+
+  return res.status(200).json(
+    new apiResponse(
+      200,
+      {
+        user: { id: user.id, name: user.name, phone: user.phone },
+        accessToken,
+        refreshToken,
+      },
+      "Login successful"
+    )
+  );
 });
 
 export { registerUser, loginUser };

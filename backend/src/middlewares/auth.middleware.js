@@ -1,16 +1,13 @@
 import { apiError } from "../utils/apiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "../config/prisma.js";
 
 export const verifyJWT = asyncHandler(async (req, _, next) => {
   try {
     const token =
       req.cookies?.accessToken ||
       req.header("Authorization")?.replace("Bearer ", "");
-
     if (!token) {
       throw new apiError(401, "Unauthorized request, token missing");
     }
@@ -28,8 +25,8 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
     }
 
     const { password, refreshToken, ...safeUser } = user;
-
     req.user = safeUser;
+    console.log(req.user);
     next();
   } catch (error) {
     throw new apiError(401, error?.message || "Invalid or expired token");
