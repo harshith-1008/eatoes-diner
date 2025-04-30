@@ -1,9 +1,7 @@
 import { apiError } from "../utils/apiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
-import getPrisma from "../config/prisma.js";
-
-const prisma = await getPrisma();
+import prisma from "../config/prisma.js";
 
 export const verifyJWT = asyncHandler(async (req, _, next) => {
   try {

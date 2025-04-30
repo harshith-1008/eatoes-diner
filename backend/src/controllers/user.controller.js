@@ -3,9 +3,7 @@ import { apiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import getPrisma from "../config/prisma.js";
-
-const prisma = await getPrisma();
+import prisma from "../config/prisma.js";
 
 const hashPassword = async (plainPassword) => {
   return await bcrypt.hash(plainPassword, 10);
