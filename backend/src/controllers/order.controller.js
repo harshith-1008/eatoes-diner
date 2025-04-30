@@ -1,7 +1,9 @@
 import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import prisma from "../config/prisma.js";
+import getPrisma from "../config/prisma.js";
+
+const prisma = await getPrisma();
 
 const createOrder = asyncHandler(async (req, res) => {
   const { orderItems } = req.body;

@@ -1,5 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+let prisma;
 
-const prisma = new PrismaClient();
+const getPrisma = async () => {
+  if (!prisma) {
+    const { PrismaClient } = await import("@prisma/client");
+    prisma = new PrismaClient();
+  }
+  return prisma;
+};
 
-export default prisma;
+export default getPrisma;

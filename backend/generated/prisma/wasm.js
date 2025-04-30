@@ -123,8 +123,7 @@ exports.Prisma.UserScalarFieldEnum = {
   phone: 'phone',
   password: 'password',
   role: 'role',
-  createdAt: 'createdAt',
-  refereshToekn: 'refereshToekn'
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.OrderScalarFieldEnum = {
@@ -149,15 +148,15 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
-};
-
 exports.Prisma.JsonNullValueFilter = {
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 exports.Role = exports.$Enums.Role = {
   CUSTOMER: 'CUSTOMER',
