@@ -5,9 +5,9 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build": "prisma generate && prisma migrate deploy",
+    "build": "npx prisma generate && npx prisma migrate deploy",
     "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js",
-    "start": "prisma generate && prisma migrate deploy && node --experimental-specifier-resolution=node src/index.js"
+    "start": "node --experimental-specifier-resolution=node src/index.js"
   },
   "keywords": [],
   "author": "",
