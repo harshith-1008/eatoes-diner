@@ -4,7 +4,7 @@
 
 [Live hosted link](https://eatoes-diner.vercel.app)
 
-## 🛠️ Tech Stack
+## Technologies used
 
 ### Backend
 
@@ -110,23 +110,21 @@ This project uses a hybrid database approach—choosing the most suitable databa
 
 1. Menu Items – Stored in MongoDB
 
-Menu items are often dynamic and flexible.
-The structure of a menu item can vary, especially when you introduce things like add-ons, flavors, or seasonal items.
-MongoDB is schema-less, making it a natural fit for this type of data.
+Menu items are often dynamic and flexible. The structure of item can vary time to time eg: when we want to add or modify fields like price, description or flavours etc. MongoDB is schema-less, making it a natural fit for this type of data.
 It allows faster read/write operations for content that doesn't require relational integrity.
 
 2. Users – Stored in PostgreSQL
 
 User data (name, phone, password, role) is structured and consistent.
-Authentication workflows require strict validation, constraints (e.g., unique phone numbers), and predictable relationships.
-PostgreSQL supports these needs well and integrates cleanly with Prisma ORM.
+Authentication requires strict validation, constraints (e.g., unique phone numbers), and predictable relationships.
+PostgreSQL supports these needs well and integrates well with Prisma ORM.
 Using a relational database also helps in enforcing security-related features such as data integrity and proper indexing.
 
 3. Orders – Stored in PostgreSQL
 
 Orders are transactional and closely tied to users.
 Each order must be stored reliably with history, timestamps, and total amounts.
-PostgreSQL provides the transactional guarantees needed to prevent data inconsistency (e.g., avoiding half-saved orders).
+PostgreSQL provides the transactional guarantees needed to prevent data inconsistency (e.g., avoiding half-saved orders) which can be implemented in future when the app scales.
 The foreign key relationship between User and Order is best handled in a relational setup.
 
 ## API Endpoints
@@ -141,8 +139,7 @@ The foreign key relationship between User and Order is best handled in a relatio
 | `/api/v1/menu/add`              | POST   | Add menu item (can be accessed through Postman)      |
 | `/api/v1/menu/update/:id`       | POST   | Modify menu item (can be accessed through Postman)   |
 | `/api/v1/order/create-order`    | POST   | Create a new order (Authenticated)                   |
-
-| `/api/v1/order/orders` | GET | Get all orders of logged-in user |
+| `/api/v1/order/orders`          | GET    | Get all orders of logged-in user                     |
 
 JWT tokens are set automatically in cookies after login or register.
 

@@ -32,6 +32,7 @@ export const Menu = ({ cartItems, setCartItems }: MenuProps) => {
 
   const fetchMenuItems = async (category = "") => {
     try {
+      console.log(loading);
       setLoading(true);
       setError("");
 
