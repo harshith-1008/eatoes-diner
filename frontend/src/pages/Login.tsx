@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const Login = () => {
   const [phone, setPhone] = useState("");
@@ -8,6 +9,12 @@ export const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!phone || !password) {
+      alert("Both phone and password are required");
+      return;
+    }
+
     try {
       const response = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/user/login`,
@@ -24,13 +31,18 @@ export const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Login successful ");
+        alert("Login successful!");
         navigate("/");
       } else {
-        alert(data.message || "Login failed ");
+        if (data.message) {
+          alert(data.message);
+        } else {
+          alert("Login failed. Please try again.");
+        }
       }
     } catch (error) {
       console.error("Login error:", error);
+      alert("Network error. Please try again later.");
     }
   };
 
@@ -64,6 +76,12 @@ export const Login = () => {
           Login
         </button>
       </form>
+      <p className="mt-6">
+        New user?
+        <Link to="/register" className="text-blue-500">
+          Register here
+        </Link>
+      </p>
     </div>
   );
 };

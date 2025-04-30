@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Order {
   id: number;
@@ -11,6 +12,7 @@ export const OrderHistory = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -43,9 +45,26 @@ export const OrderHistory = () => {
       {loading ? (
         <p>Loading orders...</p>
       ) : error ? (
-        <p className="text-red-600">{error}</p>
+        <div className="text-red-600">
+          <button
+            onClick={() => navigate("/login")}
+            className="mt-2 text-blue-600 underline"
+          >
+            Login to view order history
+          </button>
+        </div>
       ) : orders.length === 0 ? (
-        <p>No orders found.</p>
+        <div className="text-center text-gray-700">
+          <p className="text-lg font-medium mb-2">
+            You haven't placed any orders yet.
+          </p>
+          <button
+            onClick={() => navigate("/")}
+            className="mt-2 bg-green-700 text-white px-4 py-2 rounded-md"
+          >
+            Browse Menu
+          </button>
+        </div>
       ) : (
         <div className="space-y-6">
           {orders.map((order) => (
@@ -69,12 +88,12 @@ export const OrderHistory = () => {
                     className="flex justify-between text-sm text-gray-700"
                   >
                     <p>
-                      {item.name}{" "}
+                      {item.name}
                       {item.quantity && item.quantity > 1
-                        ? `× ${item.quantity}`
+                        ? ` × ${item.quantity}`
                         : ""}
                     </p>
-                    <p>₹{item.price}</p>
+                    <p>₹{item.price * (item.quantity || 1)}</p>
                   </div>
                 ))}
               </div>

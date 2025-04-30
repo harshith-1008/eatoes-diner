@@ -21,23 +21,44 @@ interface MenuProps {
 export const Menu = ({ cartItems, setCartItems }: MenuProps) => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>("");
+  const [error, setError] = useState(
+    " Please wait a moment. Render may take ~50s to start the server."
+  );
+  const [loading, setLoading] = useState(true);
+
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({
     recommended: true,
   });
 
   const fetchMenuItems = async (category = "") => {
     try {
+      setLoading(true);
+      setError("");
+
       let url = `${import.meta.env.VITE_BACKEND_URL}/menu`;
       if (category) {
         url += `?category=${category}`;
       }
-      const response = await fetch(url);
+
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000);
+
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeout);
+
+      if (!response.ok) throw new Error("Failed to fetch menu");
+
       const data = await response.json();
       if (data?.data) {
         setMenuItems(data.data);
       }
-    } catch (error) {
-      console.error("Error fetching menu items:", error);
+    } catch (err: any) {
+      setError(
+        "Please wait a moment. Render may take ~50s to start the server."
+      );
+      console.error("Menu fetch error:", err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,6 +114,20 @@ export const Menu = ({ cartItems, setCartItems }: MenuProps) => {
       .filter((item) => item.quantity > 0);
     setCartItems(updatedCart);
   };
+
+  if (error) {
+    return (
+      <div className="text-red-600 text-center mt-10">
+        <p>{error}</p>
+        <button
+          onClick={() => fetchMenuItems()}
+          className="mt-4 text-blue-600 underline"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   return (
     <section className="mx-2 mt-8 md:mx-20 md:my-4 md:py-4 md:px-4 px-2 py-2">

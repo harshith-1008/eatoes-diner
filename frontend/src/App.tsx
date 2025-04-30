@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { Navabar } from "./components/Navbar";
-import { Menu } from "./components/Menu";
+import { Menu } from "./pages/Menu";
 import { Cart } from "./pages/Cart";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";

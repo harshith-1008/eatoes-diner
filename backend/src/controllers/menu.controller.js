@@ -63,4 +63,32 @@ const addMenuItem = asyncHandler(async (req, res) => {
     .json(new apiResponse(201, newMenuItem, "Menu item added successfully"));
 });
 
-export { getMenuItems, getSingleItem, addMenuItem };
+const updateMenuItem = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { name, desc, category, price } = req.body;
+
+  const menuItem = await MenuItem.findById(id);
+
+  if (!menuItem) {
+    throw new apiError(404, "Menu item not found");
+  }
+
+  if (name !== undefined) menuItem.name = name;
+  if (desc !== undefined) menuItem.desc = desc;
+  if (category !== undefined) {
+    const validCategories = ["starter", "main-course", "dessert", "drinks"];
+    if (!validCategories.includes(category)) {
+      throw new apiError(400, "Invalid category provided");
+    }
+    menuItem.category = category;
+  }
+  if (price !== undefined) menuItem.price = price;
+
+  const updatedItem = await menuItem.save();
+
+  return res
+    .status(200)
+    .json(new apiResponse(200, updatedItem, "Menu item updated successfully"));
+});
+
+export { getMenuItems, getSingleItem, addMenuItem, updateMenuItem };

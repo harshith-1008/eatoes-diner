@@ -2,7 +2,7 @@
 
 ## 🔗 Deployed Site
 
-[Live hosted link](https://your-netlify-link.netlify.app)
+[Live hosted link](https://eatoes-diner.vercel.app)
 
 ## 🛠️ Tech Stack
 
@@ -138,9 +138,11 @@ The foreign key relationship between User and Order is best handled in a relatio
 | `/api/v1/menu`                  | GET    | Fetch all menu items (optionally filter by category) |
 | `/api/v1/menu?category=starter` | GET    | Fetch all menu items (optionally filter by category) |
 | `/api/v1/menu/:id`              | GET    | Fetch single menu item                               |
-| `/api/v1/menu/add`              | POST   | Add menu item                                        |
+| `/api/v1/menu/add`              | POST   | Add menu item (can be accessed through Postman)      |
+| `/api/v1/menu/update/:id`       | POST   | Modify menu item (can be accessed through Postman)   |
 | `/api/v1/order/create-order`    | POST   | Create a new order (Authenticated)                   |
-| `/api/v1/order/orders`          | GET    | Get all orders of logged-in user                     |
+
+| `/api/v1/order/orders` | GET | Get all orders of logged-in user |
 
 JWT tokens are set automatically in cookies after login or register.
 
